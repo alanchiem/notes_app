@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-struct Note {
+struct Note: Decodable {
     var title: String
     var date: String
     var _id: String
@@ -18,9 +18,24 @@ struct Note {
 
 class APIFunctions{
     
+    
+    var delegate: DataDelegate?
+    
+    // allows View controller to access the fuctions by creating an instance
+    static let functions = APIFunctions()
+    
     func fetchNotes() {
         
-        AF.request("")
+        AF.request("http://172.20.20.20:8081/fetch").response { response in
+            
+            print(response.data!)
+            
+            
+            let data = String(data: response.data!, encoding: .utf8)
+            
+            self.delegate?.updateArray(newArray: data!)
+            
+        }
     }
 
     
